@@ -2,9 +2,14 @@
 
 class Solution {
     public static int kthSmallest(int[] arr, int k) {
-        Arrays.sort(arr);
+        PriorityQueue<Integer> p=new PriorityQueue<>(Collections.reverseOrder());
         
-        return arr[k-1];
+        for(int ele:arr){
+            p.add(ele);
+            
+            if(p.size()>k) p.remove();
+        }
         
+        return p.peek();
     }
 }
