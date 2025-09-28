@@ -1,13 +1,13 @@
 class Solution {
     int floorSqrt(int n) {
-        int st=0;
+        int st=1;
         int end=n;
         
         int ans=-1;
         while(st<=end){
             int mid=(st+end)/2;
             
-            if((long) mid*mid<=n){
+            if(mid<=n/mid){
                 ans=mid;
                 st=mid+1;
             }
