@@ -4,10 +4,8 @@ class Solution {
         Stack<Integer> temp=new Stack<>();
         
         int n=s.size();
-        int i=0;
-        while(i<n/2){
+        while(s.size()>(n+1)/2){
             temp.push(s.pop());
-            i++;
         }
         
         s.pop();
