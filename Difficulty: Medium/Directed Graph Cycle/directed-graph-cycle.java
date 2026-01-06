@@ -1,47 +1,38 @@
 class Solution {
-    public void bfs(int i,boolean[] vis,List<List<Integer>> adj,int[] In,ArrayList<Integer> ans){
+    public static boolean flag;
+    public void dfs(int i,List<List<Integer>> adj,boolean[] vis,boolean[] path){
         vis[i] = true;
-        Queue<Integer> q = new LinkedList<>();
-        q.add(i);
-        
-        while(!q.isEmpty()){
-            int temp = q.remove();
+        path[i] = true;
 
-            for(int ele:adj.get(temp)){
-                if(In[ele] > 0) {
-                    In[ele]--;
-                }
-                if(!vis[ele] && In[ele]==0){
-                    q.add(ele);
-                    vis[ele] = true;
-                }
+        for(int ele:adj.get(i)){
+            if(path[ele]==true){
+                flag = true;
+                return;
             }
-            ans.add(temp);
+            if(!vis[ele]) dfs(ele,adj,vis,path);
         }
-        
+
+        path[i] = false;
     }
     public boolean isCyclic(int V, int[][] edges) {
-       ArrayList<Integer> ans = new ArrayList<>();
-        
+        flag = false; // No cycle...
         List<List<Integer>> adj = new ArrayList<>();
+
+        // create adj List
         for(int i=0;i<V;i++) adj.add(new ArrayList<>());
-        
-        int[] indegree = new int[V];
         for(int[] arr:edges){
-            int src = arr[0];
-            int dest = arr[1];
-            
-            indegree[dest]++;
+            int dest = arr[0];
+            int src = arr[1];
+            // edge from src --> dest
             adj.get(src).add(dest);
         }
-        
+
         boolean[] vis = new boolean[V];
-        for(int i=0;i<V;i++){
-            if(!vis[i] && indegree[i]==0){
-                bfs(i,vis,adj,indegree,ans);
-            }
-        }
+        boolean[] path = new boolean[V];
         
-        return ans.size() != V;
+        for(int i=0;i<V;i++) {
+            if(!vis[i]) dfs(i,adj,vis,path);
+        }
+        return flag;
     }
 }
