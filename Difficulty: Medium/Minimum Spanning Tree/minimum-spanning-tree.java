@@ -54,7 +54,7 @@ class Solution {
             }
             
             for(pair p:adj.get(node)){
-                if(!vis[p.node]){
+                if(!vis[p.node] && p.node!=node){
                     pq.add(new triplet(p.node,node,p.dist));
                 }
             }
