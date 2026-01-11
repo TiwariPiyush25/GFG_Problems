@@ -38,7 +38,6 @@ class Solution {
         }
         
         boolean[] vis = new boolean[V];
-        ArrayList<triplet> MST = new ArrayList<>();
         int sum  = 0;
         
         PriorityQueue<triplet> pq = new PriorityQueue<>();
@@ -51,7 +50,6 @@ class Solution {
             if(vis[node]) continue;
             
             if(parent!=-1){
-                MST.add(new triplet(node,parent,dist));
                 sum += dist;
             }
             
