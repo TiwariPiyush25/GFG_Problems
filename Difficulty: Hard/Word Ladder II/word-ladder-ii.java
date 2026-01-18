@@ -30,6 +30,7 @@ class Solution {
                 for(String s:usedOnLevel){
                     set.remove(s);
                 }
+                usedOnLevel.clear();
             }
 
             String word = list.get(list.size()-1);
