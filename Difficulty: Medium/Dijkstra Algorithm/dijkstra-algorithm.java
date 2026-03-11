@@ -3,9 +3,9 @@ class Solution {
         int node;
         int dist;
         
-        pair(int n,int dist){
+        pair(int n,int d){
             this.node = n;
-            this.dist = dist;
+            this.dist = d;
         }
         
         public int compareTo(pair p){
@@ -18,31 +18,29 @@ class Solution {
             adj.add(new ArrayList<>());
         }
         
-        for(int[] arr:edges){
-            int node1 = arr[0];
-            int node2 = arr[1];
-            int dist = arr[2];
+        for(int[] edge : edges){
+            int u = edge[0], v = edge [1], dist = edge[2];
             
-            adj.get(node1).add(new pair(node2,dist));
-            adj.get(node2).add(new pair(node1,dist));
+            adj.get(u).add(new pair(v,dist));
+            adj.get(v).add(new pair(u,dist));
         }
         
         int[] cost = new int[V];
         Arrays.fill(cost,Integer.MAX_VALUE);
         cost[src] = 0;
+        PriorityQueue<pair> minheap = new PriorityQueue<>();
+        minheap.add(new pair(src,0));
         
-        PriorityQueue<pair> pq = new PriorityQueue<>();
-        pq.add(new pair(src,0));
-        
-        while(!pq.isEmpty()){
-            pair top = pq.remove();
+        while(!minheap.isEmpty()){
+            pair top = minheap.remove();
             
             if(top.dist > cost[top.node]) continue;
             for(pair p:adj.get(top.node)){
-                int totaldist = p.dist + top.dist;
+                int totaldist = top.dist + p.dist;
+                
                 if(totaldist < cost[p.node]){
+                    minheap.add(new pair(p.node,totaldist));
                     cost[p.node] = totaldist;
-                    pq.add(new pair(p.node,totaldist));
                 }
             }
         }
