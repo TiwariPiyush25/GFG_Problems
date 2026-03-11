@@ -1,38 +1,47 @@
 class Solution {
-    public static boolean flag;
-    public void dfs(int i,List<List<Integer>> adj,boolean[] vis,boolean[] path){
+    public void bfsKahn(int i,List<List<Integer>> adj,boolean[] vis,ArrayList<Integer> ans,int[] indegree ){
         vis[i] = true;
-        path[i] = true;
-
-        for(int ele:adj.get(i)){
-            if(path[ele]==true){
-                flag = true;
-                return;
-            }
-            if(!vis[ele]) dfs(ele,adj,vis,path);
-        }
-
-        path[i] = false;
-    }
-    public boolean isCyclic(int V, int[][] edges) {
-        flag = false; // No cycle...
-        List<List<Integer>> adj = new ArrayList<>();
-
-        // create adj List
-        for(int i=0;i<V;i++) adj.add(new ArrayList<>());
-        for(int[] arr:edges){
-            int dest = arr[0];
-            int src = arr[1];
-            // edge from src --> dest
-            adj.get(src).add(dest);
-        }
-
-        boolean[] vis = new boolean[V];
-        boolean[] path = new boolean[V];
+        Queue<Integer> Q = new LinkedList<>();
+        Q.add(i);
         
-        for(int i=0;i<V;i++) {
-            if(!vis[i]) dfs(i,adj,vis,path);
+        while(!Q.isEmpty()){
+            int top = Q.remove();
+            
+            for(int ele:adj.get(top)){
+                if(indegree[ele] > 0){
+                    indegree[ele]--;
+                }
+                if(!vis[ele] && indegree[ele] == 0){
+                    Q.add(ele);
+                    vis[ele] = true;
+                }
+            }
+            
+            ans.add(top);
         }
-        return flag;
+    } 
+    public boolean isCyclic(int V, int[][] edges) {
+       ArrayList<Integer> ans = new ArrayList<>();
+       
+       List<List<Integer>> adj = new ArrayList<>();
+       for(int i=0;i<V;i++){
+           adj.add(new ArrayList<>());
+       }
+       int[] indegree = new int[V];
+       for(int[] edge : edges){
+           int u = edge[0], v = edge[1];
+           
+           adj.get(u).add(v);
+           indegree[v]++;
+       }
+       
+       boolean[] vis = new boolean[V];
+       for(int i=0;i<V;i++){
+           if(!vis[i] && indegree[i] == 0){
+               bfsKahn(i,adj,vis,ans,indegree);
+           }
+       }    
+       
+       return ans.size() != V;
     }
 }
